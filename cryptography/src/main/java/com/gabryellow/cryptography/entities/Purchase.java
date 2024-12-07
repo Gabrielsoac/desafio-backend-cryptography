@@ -12,15 +12,15 @@ public class Purchase {
     private Long id;
 
     @Column(name = "user_document", nullable = false)
-    private String userDocument;
+    private byte[] userDocument;
 
     @Column(name = "credit_card_token", nullable = false)
-    private String creditCardToken;
+    private byte[] creditCardToken;
 
     @Column(nullable = false)
     private Long value;
 
-    public Purchase(String userDocument, String creditCardToken, Long value) {
+    public Purchase(byte[] userDocument, byte[] creditCardToken, Long value) {
         this.userDocument = userDocument;
         this.creditCardToken = creditCardToken;
         this.value = value;
@@ -34,19 +34,19 @@ public class Purchase {
         return id;
     }
 
-    public String getUserDocument() {
+    public byte[] getUserDocument() {
         return userDocument;
     }
 
-    public void setUserDocument(String userDocument) {
+    public void setUserDocument(byte[] userDocument) {
         this.userDocument = userDocument;
     }
 
-    public String getCreditCardToken() {
+    public byte[] getCreditCardToken() {
         return creditCardToken;
     }
 
-    public void setCreditCardToken(String creditCardToken) {
+    public void setCreditCardToken(byte[] creditCardToken) {
         this.creditCardToken = creditCardToken;
     }
 

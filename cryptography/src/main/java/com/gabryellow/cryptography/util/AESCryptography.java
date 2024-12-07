@@ -25,8 +25,6 @@ public class AESCryptography {
         cipher.init(2, key);
 
         byte[] decodedData = Base64.getDecoder().decode(encryptedData);
-        String decryptedData = new String(cipher.doFinal(decodedData));
-
-        return decryptedData;
+        return new String(cipher.doFinal(decodedData));
     }
 }

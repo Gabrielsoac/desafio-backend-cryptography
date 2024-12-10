@@ -9,8 +9,8 @@ import java.util.Optional;
 public interface PurchaseService {
 
     ResponsePurchaseDTO getPurchase(Long id);
-    List<Purchase> getAllPurchases();
+    List<ResponsePurchaseDTO> getAllPurchases();
     ResponsePurchaseDTO createPurchase(String userDocument, String creditCardToken, Long value);
-    ResponsePurchaseDTO updatePurchase(Purchase purchase, Long value);
-    void deletePurchase(Purchase purchase);
+    ResponsePurchaseDTO updatePurchase(Long id, String userDocument, String creditCardToken, Long value);
+    void deletePurchase(Long id);
 }

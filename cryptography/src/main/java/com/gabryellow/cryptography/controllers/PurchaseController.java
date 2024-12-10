@@ -4,11 +4,13 @@ import com.gabryellow.cryptography.services.DTOs.RequestPurchaseDTO;
 import com.gabryellow.cryptography.services.DTOs.ResponsePurchaseDTO;
 import com.gabryellow.cryptography.services.PurchaseService;
 import com.gabryellow.cryptography.services.PurchaseServiceImpl;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/purchase")
@@ -19,6 +21,11 @@ public class PurchaseController {
 
     public PurchaseController(PurchaseServiceImpl purchaseService){
         this.purchaseService = purchaseService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ResponsePurchaseDTO>> getAllPurchases(){
+        return ResponseEntity.ok(purchaseService.getAllPurchases());
     }
 
     @GetMapping("/{id}")
@@ -34,5 +41,22 @@ public class PurchaseController {
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(responsePurchaseDTO.id()).toUri();
         return ResponseEntity.created(location).body(responsePurchaseDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponsePurchaseDTO> updatePurchase(@PathVariable Long id, @RequestBody RequestPurchaseDTO data){
+        ResponsePurchaseDTO responsePurchaseDTO = purchaseService.updatePurchase(
+                id,
+                data.userDocument(),
+                data.creditCardToken(),
+                data.value());
+
+        return ResponseEntity.ok(responsePurchaseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePurchase(@PathVariable Long id){
+        purchaseService.deletePurchase(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -91,6 +91,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 
         purchaseRepository.delete(purchaseOptional.get());
     }
+
     private ResponsePurchaseDTO descryptograph(Purchase purchase){
         String creditCardTokenDecrypted = AESCryptography.decrypt(purchase.getCreditCardToken());
         String userDocumentDecrypted = AESCryptography.decrypt(purchase.getUserDocument());

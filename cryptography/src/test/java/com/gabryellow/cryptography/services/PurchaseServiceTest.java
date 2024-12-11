@@ -90,7 +90,7 @@ public class PurchaseServiceTest {
     }
 
     @Test
-    @DisplayName("Should to refuse update a Purchase")
+    @DisplayName("Should to refuse update a Purchase with sucess")
     void refuseUpdatePurchase(){
         Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.empty());
@@ -103,4 +103,31 @@ public class PurchaseServiceTest {
         Assertions.assertEquals("Purchase Not Found", message);
     }
 
+    @Test
+    @DisplayName("Should to delete a purchase with sucess")
+    void deletePurchase(){
+
+        Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(PurchaseBuilder.aPurchase().build()));
+
+        purchaseService.deletePurchase(1L);
+        Mockito.verify(purchaseRepository, Mockito.times(2))
+                .delete(Mockito.any(Purchase.class));
+    }
+
+    @Test
+    @DisplayName("Should to refuse delete a purchase")
+    void refuseDeletePurchase(){
+
+        Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.empty());
+
+        String message = Assertions.assertThrows(PurchaseNotFoundException.class,
+                        () -> purchaseService.deletePurchase(1L))
+                .getMessage();
+
+        Assertions.assertEquals("Purchase Not Found", message);
+
+
+    }
 }

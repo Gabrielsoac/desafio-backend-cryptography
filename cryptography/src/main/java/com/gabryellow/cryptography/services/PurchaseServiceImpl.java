@@ -87,7 +87,7 @@ public class PurchaseServiceImpl implements PurchaseService{
     public void deletePurchase(Long id) {
         Optional<Purchase> purchaseOptional = purchaseRepository.findById(id);
 
-        if (!purchaseOptional.isPresent()) throw new PurchaseNotFoundException("Purchase not found");
+        if (!purchaseOptional.isPresent()) throw new PurchaseNotFoundException("Purchase Not Found");
 
         purchaseRepository.delete(purchaseOptional.get());
     }

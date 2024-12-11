@@ -1,5 +1,6 @@
 package com.gabryellow.cryptography.util;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,14 @@ import java.util.Base64;
 public class AESCryptography {
 
     @Value("${key.value}")
+    private String injectedKey;
+
     private static String key;
+
+    @PostConstruct
+    public void init() {
+        key = injectedKey;
+    }
 
     public static String encrypt(String data){
 

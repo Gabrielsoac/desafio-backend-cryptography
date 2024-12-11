@@ -26,6 +26,13 @@ public class Purchase {
         this.value = value;
     }
 
+    public Purchase(Long id, String userDocument, String creditCardToken, Long value) {
+        this.id = id;
+        this.userDocument = userDocument;
+        this.creditCardToken = creditCardToken;
+        this.value = value;
+    }
+
     public Purchase(){
 
     }

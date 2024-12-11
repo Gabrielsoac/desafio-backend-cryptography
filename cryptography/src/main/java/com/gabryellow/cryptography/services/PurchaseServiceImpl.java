@@ -31,7 +31,7 @@ public class PurchaseServiceImpl implements PurchaseService{
             return descryptograph(purchase);
         }
 
-        throw new PurchaseNotFoundException("Purchase not found");
+        throw new PurchaseNotFoundException("Purchase Not Found");
     }
 
     @Override

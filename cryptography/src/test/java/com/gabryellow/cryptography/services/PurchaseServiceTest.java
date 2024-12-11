@@ -56,7 +56,7 @@ public class PurchaseServiceTest {
         String message = Assertions.assertThrows(PurchaseNotFoundException.class,
                 () -> purchaseService.getPurchase(1L)).getMessage();
 
-        Assertions.assertEquals("Purchase not found", message);
+        Assertions.assertEquals("Purchase Not Found", message);
     }
 
     @Test
@@ -76,5 +76,31 @@ public class PurchaseServiceTest {
                 .save(Mockito.any(Purchase.class));
     }
 
-    
+    @Test
+    @DisplayName("Should to update Purchase with sucess")
+    void updatePurchaseWithSucess(){
+
+        Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
+            .thenReturn(Optional.of(PurchaseBuilder.aPurchase().build()));
+
+        ResponsePurchaseDTO purchase = purchaseService.updatePurchase(
+                1L, "1234322", "1234543265437654", 30L);
+
+        Assertions.assertEquals(30L, purchase.value());
+    }
+
+    @Test
+    @DisplayName("Should to refuse update a Purchase")
+    void refuseUpdatePurchase(){
+        Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.empty());
+
+        String message = Assertions.assertThrows(PurchaseNotFoundException.class,
+                () -> purchaseService.updatePurchase(
+                        1L, "1234322", "1234543265437654", 30L ))
+                        .getMessage();
+
+        Assertions.assertEquals("Purchase Not Found", message);
+    }
+
 }

@@ -3,7 +3,6 @@ package com.gabryellow.cryptography.services;
 import com.gabryellow.cryptography.builders.PurchaseBuilder;
 import com.gabryellow.cryptography.entities.Purchase;
 import com.gabryellow.cryptography.repository.PurchaseRepository;
-import com.gabryellow.cryptography.services.DTOs.ResponsePurchaseDTO;
 import com.gabryellow.cryptography.services.exceptions.PurchaseNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,13 +37,13 @@ public class PurchaseServiceTest {
         Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
             .thenReturn(Optional.of(PurchaseBuilder.aPurchase().build()));
 
-        ResponsePurchaseDTO purchase = purchaseService.getPurchase(1L);
+        Purchase purchase = purchaseService.getPurchase(1L);
 
         Assertions.assertAll("Purchase Data",
-                () -> Assertions.assertEquals(1L, purchase.id()),
-                () -> Assertions.assertEquals("12340987", purchase.userDocument()),
-                () -> Assertions.assertEquals("1234-5432-2123-5423", purchase.creditCardToken()),
-                () -> Assertions.assertEquals(20L, purchase.value()));
+                () -> Assertions.assertEquals(1L, purchase.getId()),
+                () -> Assertions.assertEquals("OzgDHDLIKJk2FDQy5xclhA==", purchase.getUserDocument()),
+                () -> Assertions.assertEquals("qy//miOz0SJ8gs0L3cyNuVe204t47h4TICqP5J+4iFE=", purchase.getCreditCardToken()),
+                () -> Assertions.assertEquals(20L, purchase.getValue()));
     }
 
     @Test
@@ -67,8 +66,8 @@ public class PurchaseServiceTest {
             .thenReturn(PurchaseBuilder.aPurchase().build());
 
         purchaseService.createPurchase(
-            "12340987",
-            "1234-5432-2123-5423",
+            "OzgDHDLIKJk2FDQy5xclhA==",
+            "qy//miOz0SJ8gs0L3cyNuVe204t47h4TICqP5J+4iFE=",
             20L );
 
         Mockito.verify(purchaseRepository,
@@ -83,51 +82,26 @@ public class PurchaseServiceTest {
         Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
             .thenReturn(Optional.of(PurchaseBuilder.aPurchase().build()));
 
-        ResponsePurchaseDTO purchase = purchaseService.updatePurchase(
-                1L, "1234322", "1234543265437654", 30L);
+        Purchase purchase = purchaseService.updatePurchase(
+                PurchaseBuilder.aPurchase()
+                        .setCreditCardToken("8312fsa938gg219fd=")
+                        .setUserDocument("dusaiyudsa78dsa=")
+                        .setValue(2000L).build(),
+                "OzgDHDLIKJk2FDQy5xclhA==",
+                "qy//miOz0SJ8gs0L3cyNuVe204t47h4TICqP5J+4iFE=",
+                30L);
 
-        Assertions.assertEquals(30L, purchase.value());
-    }
-
-    @Test
-    @DisplayName("Should to refuse update a Purchase with sucess")
-    void refuseUpdatePurchase(){
-        Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.empty());
-
-        String message = Assertions.assertThrows(PurchaseNotFoundException.class,
-                () -> purchaseService.updatePurchase(
-                        1L, "1234322", "1234543265437654", 30L ))
-                        .getMessage();
-
-        Assertions.assertEquals("Purchase Not Found", message);
+        Assertions.assertEquals(30L, purchase.getValue());
     }
 
     @Test
     @DisplayName("Should to delete a purchase with sucess")
     void deletePurchase(){
 
-        Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.of(PurchaseBuilder.aPurchase().build()));
+        Purchase purchase = PurchaseBuilder.aPurchase().build();
 
-        purchaseService.deletePurchase(1L);
-        Mockito.verify(purchaseRepository, Mockito.times(2))
-                .delete(Mockito.any(Purchase.class));
-    }
-
-    @Test
-    @DisplayName("Should to refuse delete a purchase")
-    void refuseDeletePurchase(){
-
-        Mockito.when(purchaseRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.empty());
-
-        String message = Assertions.assertThrows(PurchaseNotFoundException.class,
-                        () -> purchaseService.deletePurchase(1L))
-                .getMessage();
-
-        Assertions.assertEquals("Purchase Not Found", message);
-
-
+        purchaseService.deletePurchase(purchase);
+        Mockito.verify(purchaseRepository, Mockito.times(1))
+            .delete(Mockito.any(Purchase.class));
     }
 }

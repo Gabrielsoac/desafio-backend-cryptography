@@ -47,6 +47,10 @@ public class PurchaseController {
     @PostMapping
     public ResponseEntity<ResponsePurchaseDTO> createPurchase(@RequestBody RequestPurchaseDTO data){
 
+        validateData(data.userDocument());
+        validateData(data.creditCardToken());
+        validateValue(data.value());
+
         List<String> encryptedData = cryptograph(data.userDocument(), data.creditCardToken());
 
         String userDocumentEncrypted = encryptedData.get(0);
@@ -61,6 +65,11 @@ public class PurchaseController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponsePurchaseDTO> updatePurchase(@PathVariable Long id, @RequestBody RequestPurchaseDTO data){
+
+        validateData(data.userDocument());
+        validateData(data.creditCardToken());
+        validateValue(data.value());
+
         Purchase purchase = purchaseService.getPurchase(id);
 
         List<String> encryptedData = cryptograph(data.userDocument(), data.creditCardToken());
@@ -92,5 +101,12 @@ public class PurchaseController {
         String creditCardTokenEncrypted = AESCryptography.encrypt(creditCardToken);
 
         return List.of(userDocumentEncrypted, creditCardTokenEncrypted);
+    }
+
+    private void validateData(String data){
+        if(data == null || data.isEmpty()) throw new IllegalArgumentException("Data cannot be null or empty");
+    }
+    private void validateValue(Long value){
+        if(value == null || value <= 0) throw new IllegalArgumentException("Value cannot be null or less than zero");
     }
 }

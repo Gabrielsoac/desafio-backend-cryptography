@@ -15,6 +15,7 @@ Seu desafio será implementar a criptografia em um serviço de forma transparent
 - PostgreSQL 16
 - Docker
 - FlyWay (Migrattions)
+- Junit5
 
   <br>
 
